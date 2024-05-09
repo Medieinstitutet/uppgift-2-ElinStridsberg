@@ -1,0 +1,10 @@
+    <?php
+        include_once("functions.php");
+    ?>
+    <?php
+        include('./components/header.php');
+    ?>
+    <p>index</p>
+<?php
+    include('./components/footer.php');
+?>
