@@ -2,9 +2,13 @@
         include_once("functions.php");
     ?>
     <?php
-        include('./components/header.php');
+     
+        include('./account/create-account.php');
     ?>
-    <p>index</p>
-<?php
-    include('./components/footer.php');
-?>
+
+    <?php
+            connect_database();
+            get_users();
+         
+    ?>
+    
