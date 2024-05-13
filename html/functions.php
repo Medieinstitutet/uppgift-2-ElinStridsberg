@@ -23,7 +23,6 @@ function is_signed_in() {
 function connect_database () { 
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "SaaS");
     return $mysqli;
-
 }
 
 function get_users () { 
@@ -41,16 +40,12 @@ function get_users () {
         </div>
         <?php
     }                
-    };
+}
 
 function create_user($name, $email, $password, $role) {
     $mysqli = connect_database();
 
     $mysqli->query("INSERT INTO users (name, email, password, role) VALUES ($name, $email, $password, $role)");
-
-
-
-
 }
 
 function get_newsletters() {
@@ -58,28 +53,40 @@ function get_newsletters() {
     
     $result = $mysqli->query("SELECT * FROM newsletters");
     
-        $rows = $result->fetch_all(MYSQLI_ASSOC);
-        foreach($rows as $row) {
-            ?>
-            <div>
-                <h3><?php echo $row["name"]; ?></h3>
-                <p><?php echo $row["description"]; ?></p>
-            </div>
-            <?php
-        }
-
-    };
+    $rows = $result->fetch_all(MYSQLI_ASSOC);
+    foreach($rows as $row) {
+        ?>
+        <div>
+            <h3><?php echo $row["name"]; ?></h3>
+            <p><?php echo $row["description"]; ?></p>
+        </div>
+        <?php
+    }
+}
 
 function get_subscribers() {
     $mysqli = connect_database();
     
     $result = $mysqli->query("SELECT * FROM subscribers");
     
-        var_dump($result->fetch_all());
+    // Kommentera ut var_dump() för att undvika utmatning
+    // var_dump($result->fetch_all());
 
-    };
+    // Returnera istället resultaten för användning i annan kod
+    return $result->fetch_all();
+}
 
-            
-    ?>
-    
+function get_user_by_email($email) {
+    $mysqli = connect_database();
+    $email = $mysqli->real_escape_string($email);
 
+    $result = $mysqli->query("SELECT * FROM users WHERE email = '$email'");
+
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();
+    } else {
+        return false;
+    }
+}
+
+?>
