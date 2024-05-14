@@ -150,5 +150,40 @@ function save_reset_password_code($user_id, $code) {
     }
 }
 
+// Funktion för att hämta användarnamnet från databasen baserat på användar-ID
+function get_username_by_id($user_id) {
+    // Anslut till databasen
+    $mysqli = connect_database(); // Antag att detta är en funktion som ansluter till din databas
+
+    // Undvik SQL-injektioner genom att använda prepared statements
+    $stmt = $mysqli->prepare("SELECT name FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id); // "i" indikerar att det förväntas en integer
+
+    // Utför frågan
+    $stmt->execute();
+
+    // Hämta resultatet
+    $result = $stmt->get_result();
+
+    // Kontrollera om det finns rader
+    if ($result->num_rows > 0) {
+        // Hämta användarnamnet från resultatet
+        $row = $result->fetch_assoc();
+        $username = $row['name'];
+    } else {
+        // Om användaren inte hittades, returnera false eller ett standardvärde
+        $username = false;
+    }
+
+    // Stäng prepared statement och anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+
+    // Returnera användarnamnet
+    return $username;
+    var_dump($username);
+}
+
+
 
 ?>
