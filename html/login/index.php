@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Login</title>
 </head>
 <body>
-    <h2>Login</h2>
+    <h2>Logga in</h2>
     <?php
     // Visa eventuellt felmeddelande om det är satt
     if (isset($error_message)) {

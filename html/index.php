@@ -16,8 +16,9 @@ $mysqli->close();
 </head>
 <body>
 <div>
-    <h1>Welcome</h1>
-    <button onclick="window.location.href='/account/create-account.php'">Create account</button>
-    <button onclick="window.location.href='/login'">Log in</button>
+    <h1>Välkommen!</h1>
+    <p>Vänligen logga in eller registrera dig nedan</p>
+    <button onclick="window.location.href='/account/create-account.php'">Registrera</button>
+    <button onclick="window.location.href='/login'">Logga in</button>
     </div></body>
 </html>
