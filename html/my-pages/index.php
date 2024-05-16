@@ -16,6 +16,7 @@ $user_id = $_SESSION['user_id'];
 
 // Hämta användarens namn från databasen baserat på användar-ID:t
 $user_name = get_username_by_id($user_id);
+// include_once('../components/header-loggedin.php');
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +29,6 @@ $user_name = get_username_by_id($user_id);
 <body>
     <h2>Välkommen, <?php echo $user_name; ?></h2>
     <!-- Visa andra användarrelaterade uppgifter här -->
-    <p>Din användarprofil</p>
-    <p>Dina prenumerationer </p>
     <button onclick="window.location.href='/newsletter'">Dina prenumerationer</button>
 </body>
 </html>

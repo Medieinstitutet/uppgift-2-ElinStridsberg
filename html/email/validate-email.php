@@ -1,4 +1,5 @@
-<?php
+
+ <?php
 // Inkludera din databasanlutningsfil och andra hjälpfunktioner
 include('../functions.php');
 

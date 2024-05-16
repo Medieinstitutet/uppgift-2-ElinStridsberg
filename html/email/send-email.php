@@ -1,3 +1,22 @@
+<style>
+        /* Flexbox för att centrera innehållet */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Placera elementen i en kolumn */
+            height: 100vh; /* Hela fönsterhöjden */
+            margin: 0; /* Ta bort marginaler */
+        }
+
+        /* Styla knappen */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px; /* Lite utrymme överst för att separera från texten */
+        }
+    </style>
+
 <?php
 // Mailgun API-nyckel och domän
 $api_key = '81e0b3e6988c5dfb2b57eff82d4efa92-32a0fef1-6a5c9100';
@@ -46,3 +65,7 @@ if ($response === false) {
 curl_close($ch);
 
 ?>
+<!-- Knapp för att gå tillbaka till indexsidan -->
+<form action="/index.php" method="get">
+    <button type="submit">Tillbaka till startsidan</button>
+</form>

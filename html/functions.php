@@ -59,9 +59,57 @@ function get_newsletters() {
         <div>
             <h3><?php echo $row["name"]; ?></h3>
             <p><?php echo $row["description"]; ?></p>
+
+            
+            <!-- Knapp för att prenumerera -->
+            <form method="post" action="subscribe.php">
+                <input type="hidden" name="newsletter_id" value="<?php echo $row['id']; ?>">
+                <button type="submit">Prenumerera</button>
+            </form>
+
+            <!-- Knapp för att avprenumerera -->
+            <form method="post" action="unsubscribe.php">
+                <input type="hidden" name="newsletter_id" value="<?php echo $row['id']; ?>">
+                <button type="submit">Avprenumerera</button>
+            </form>
+
         </div>
         <?php
     }
+}
+
+// functions.php
+
+// Funktion för att hämta nyhetsbrev baserat på dess ID
+function get_newsletter_by_id($newsletter_id) {
+    // Anslut till databasen
+    $mysqli = connect_database(); // Anpassa detta till din egen funktion för att ansluta till databasen
+
+    // Förbered SQL-frågan med en placeholders för nyhetsbrevets ID
+    $stmt = $mysqli->prepare("SELECT name, description FROM newsletters WHERE id = ?");
+    $stmt->bind_param("i", $newsletter_id); // "i" indikerar att det förväntas en integer
+
+    // Utför SQL-frågan
+    $stmt->execute();
+
+    // Hämta resultatet från frågan
+    $result = $stmt->get_result();
+
+    // Kontrollera om det finns rader i resultatet
+    if ($result->num_rows > 0) {
+        // Hämta information om nyhetsbrevet från resultatet
+        $newsletter = $result->fetch_assoc();
+    } else {
+        // Om nyhetsbrevet inte hittades, sätt $newsletter till false eller ett standardvärde
+        $newsletter = false;
+    }
+
+    // Stäng prepared statement och databasanslutningen
+    $stmt->close();
+    $mysqli->close();
+
+    // Returnera information om nyhetsbrevet
+    return $newsletter;
 }
 
 function get_subscribers() {
@@ -115,6 +163,29 @@ function get_subscriptions_by_user_id($user_id) {
         echo "Det uppstod ett fel: " . $mysqli->error;
     }
 }
+// Funktion för att avprenumerera från ett nyhetsbrev
+// Funktion för att avprenumerera från ett nyhetsbrev
+function unsubscribe_from_newsletter($user_id, $newsletter_id) {
+    $mysqli = connect_database();
+
+    // Förbered och utför SQL-frågan för att ta bort prenumerationen från databasen
+    $stmt = $mysqli->prepare("DELETE FROM subscriptions WHERE user_id = ? AND newsletter_id = ?");
+    $stmt->bind_param("ii", $user_id, $newsletter_id);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Funktion för att prenumerera på ett nyhetsbrev
+function subscribe_to_newsletter($user_id, $newsletter_id) {
+    $mysqli = connect_database();
+
+    // Förbered och utför SQL-frågan för att lägga till prenumerationen i databasen
+    $stmt = $mysqli->prepare("INSERT INTO subscriptions (user_id, newsletter_id) VALUES (?, ?)");
+    $stmt->bind_param("ii", $user_id, $newsletter_id);
+    $stmt->execute();
+    $stmt->close();
+}
+
 
 function get_user_by_email($email) {
     $mysqli = connect_database();
