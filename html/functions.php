@@ -94,10 +94,10 @@ function get_newsletters() {
     }
 }
 
-function get_newsletter_by_id($newsletter_id) {
+function get_newsletter_by_id($newsletter_id, $owner_id) {
     $mysqli = connect_database();
-    $stmt = $mysqli->prepare("SELECT name, description FROM newsletters WHERE id = ?");
-    $stmt->bind_param("i", $newsletter_id);
+    $stmt = $mysqli->prepare("SELECT name, description FROM newsletters WHERE id = ? AND owner_id = ?");
+    $stmt->bind_param("ii", $newsletter_id, $owner_id);
     $stmt->execute();
     $result = $stmt->get_result();
     
@@ -112,6 +112,8 @@ function get_newsletter_by_id($newsletter_id) {
 
     return $newsletter;
 }
+
+
 // functions.php
 
 // Funktion för att hämta användarens nyhetsbrev från databasen baserat på användar-ID
@@ -144,26 +146,19 @@ function get_user_newsletters($user_id) {
     // Returnera nyhetsbreven
     return $user_newsletters;
 }
-function update_newsletter($newsletter_id, $title, $description) {
+function update_newsletter($newsletter_id, $name, $description) {
     $mysqli = connect_database();
 
     // Förbered en SQL-fråga för att uppdatera nyhetsbrevet i databasen
-    $stmt = $mysqli->prepare("UPDATE newsletters SET title = ?, description = ? WHERE id = ?");
-    
-    // Kontrollera om titeln är satt innan du binder parametern
-    if ($title !== null) {
-        $stmt->bind_param("ssi", $title, $description, $newsletter_id);
-    } else {
-        // Om titeln inte är satt, uppdatera endast beskrivningen
-        $stmt->bind_param("si", $description, $newsletter_id);
-    }
-    
+    $stmt = $mysqli->prepare("UPDATE newsletters SET name = ?, description = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $name, $description, $newsletter_id);
     $stmt->execute();
     $stmt->close();
     
     // Stäng anslutningen
     $mysqli->close();
 }
+
 
 //TODO NEWSLETTER_ID SKA VARA DET ID SOM KUNDEN HAR PÅ SINA NYHETSBREV (DE NYHETSBREV SOM HAN ANVÄNDER)
 function get_subscribers() {
