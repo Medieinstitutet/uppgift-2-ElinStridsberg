@@ -3,7 +3,7 @@ session_start();
 
 // Inkludera din databasanslutningsfil och andra hjälpfunktioner
 include('../functions.php');
-
+include_once('../components/header.php');
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
     // Om användaren inte är inloggad, omdirigera till inloggningssidan
@@ -29,6 +29,6 @@ $user_name = get_username_by_id($user_id);
 <body>
     <h2>Välkommen, <?php echo $user_name; ?></h2>
     <!-- Visa andra användarrelaterade uppgifter här -->
-    <button onclick="window.location.href='/newsletter'">Dina prenumerationer</button>
+<!-- '    <button onclick="window.location.href='/newsletter'">Dina prenumerationer</button> -->
 </body>
 </html>

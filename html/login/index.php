@@ -13,8 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["user_role"] = $user["role"];
             $_SESSION["is_signed_in"] = true;
-            header('Location: /?success=1');var_dump($user);
-            exit();
+?>
+            <script>
+                window.location.href = '/my-pages'; // Byt ut '/my-pages' med den önskade URL:en
+            </script>
+<?php
+            exit(); // Avsluta exekveringen här för att förhindra att resten av koden körs
         } else {
             $error_message = "Felaktigt lösenord.";
         }
@@ -33,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         display: flex;
       }
     </style>
- 
-
 </head>
 <body>
 <?php
@@ -42,20 +44,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($error_message)) {
         echo "<p>$error_message</p>";
     }
-    ?>
+?>
     <div class="loginForm">
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <div>
-            <input type="email" id="email" name="email" required placeholder="Email">
-        </div>
-        <div>
-            <input type="password" id="password" name="password" required placeholder="Lösenord">
-        </div>
-        <div class="login-resetp">
-            <input type="submit" value="Logga in" class="login">
-            <button onclick="window.location.href='../email/reset-password.php'">Glömt lösenord?</button>
-        </div>
-    </form>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <div>
+                <input type="email" id="email" name="email" required placeholder="Email">
+            </div>
+            <div>
+                <input type="password" id="password" name="password" required placeholder="Lösenord">
+            </div>
+            <div class="login-resetp">
+                <input type="submit" value="Logga in" class="login">
+                <button onclick="window.location.href='../email/reset-password.php'">Glömt lösenord?</button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

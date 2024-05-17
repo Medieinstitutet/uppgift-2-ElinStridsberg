@@ -1,8 +1,8 @@
 <?php
 include_once('../functions.php');
-?>
-<?php
-    include('../components/header.php')
+include('../components/header.php');
+
+get_subscribers();
     ?>
 <p>Subscriptions for customers</p>
 <?php
