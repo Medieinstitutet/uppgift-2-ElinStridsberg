@@ -7,7 +7,7 @@ include_once('../components/header.php');
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
     // Om användaren inte är inloggad, omdirigera till inloggningssidan
-    header("Location: login.php");
+    header("Location: index.php");
     exit(); // Avsluta skriptet för att säkerställa att ingen ytterligare kod körs
 }
 

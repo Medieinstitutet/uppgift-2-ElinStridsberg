@@ -112,7 +112,60 @@ function get_newsletter_by_id($newsletter_id) {
 
     return $newsletter;
 }
+// functions.php
 
+// Funktion för att hämta användarens nyhetsbrev från databasen baserat på användar-ID
+function get_user_newsletters($user_id) {
+    // Anslut till databasen
+    $mysqli = connect_database();
+
+    // Förbered SQL-frågan för att hämta användarens nyhetsbrev baserat på owner_id
+    $stmt = $mysqli->prepare("SELECT id, name, description FROM newsletters WHERE owner_id = ?");
+    $stmt->bind_param("i", $user_id); // "i" indikerar att det förväntas en integer
+
+    // Utför frågan
+    $stmt->execute();
+
+    // Hämta resultatet
+    $result = $stmt->get_result();
+
+    // Skapa en array för att lagra nyhetsbreven
+    $user_newsletters = array();
+
+    // Loopa genom resultaten och lägg till nyhetsbreven i arrayen
+    while ($row = $result->fetch_assoc()) {
+        $user_newsletters[] = $row;
+    }
+
+    // Stäng prepared statement och anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+
+    // Returnera nyhetsbreven
+    return $user_newsletters;
+}
+function update_newsletter($newsletter_id, $title, $description) {
+    $mysqli = connect_database();
+
+    // Förbered en SQL-fråga för att uppdatera nyhetsbrevet i databasen
+    $stmt = $mysqli->prepare("UPDATE newsletters SET title = ?, description = ? WHERE id = ?");
+    
+    // Kontrollera om titeln är satt innan du binder parametern
+    if ($title !== null) {
+        $stmt->bind_param("ssi", $title, $description, $newsletter_id);
+    } else {
+        // Om titeln inte är satt, uppdatera endast beskrivningen
+        $stmt->bind_param("si", $description, $newsletter_id);
+    }
+    
+    $stmt->execute();
+    $stmt->close();
+    
+    // Stäng anslutningen
+    $mysqli->close();
+}
+
+//TODO NEWSLETTER_ID SKA VARA DET ID SOM KUNDEN HAR PÅ SINA NYHETSBREV (DE NYHETSBREV SOM HAN ANVÄNDER)
 function get_subscribers() {
     $mysqli = connect_database();
     $result = $mysqli->query("SELECT * FROM subscriptions WHERE newsletter_id = 4");

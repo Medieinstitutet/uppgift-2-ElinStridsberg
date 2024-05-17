@@ -14,7 +14,7 @@ include_once('../functions.php');
 <body>
     <h2>Du är nu utloggad</h2>
     <p>Tack för att du besökte oss. Du har nu loggats ut.</p>
-    <a href="http://localhost:8080/login/">Logga in igen</a>
+    <a href="http://localhost:8080/index.php">Logga in igen</a>
 </body>
 </html>
 
