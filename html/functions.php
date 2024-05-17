@@ -41,8 +41,6 @@ function get_users () {
 
 function is_user_subscribed($user_id, $newsletter_id) {
     $mysqli = connect_database();
-    // var_dump($user_id); // Kommentera bort denna rad
-    // var_dump($newsletter_id); // Kommentera bort denna rad
     $stmt = $mysqli->prepare("SELECT COUNT(*) FROM subscriptions WHERE user_id = ? AND newsletter_id = ?");
     
     if (!$stmt) {
@@ -106,7 +104,6 @@ function get_newsletter_by_id($newsletter_id, $owner_id) {
     } else {
         $newsletter = false;
     }
-
     $stmt->close();
     $mysqli->close();
 
@@ -114,9 +111,26 @@ function get_newsletter_by_id($newsletter_id, $owner_id) {
 }
 
 
-// functions.php
+function get_user_subscribed_newsletters($user_id) {
+    $mysqli = connect_database();
+    
+    $query = "SELECT n.name, n.description FROM newsletters AS n INNER JOIN subscriptions AS s ON n.id = s.newsletter_id WHERE s.user_id = ?";
+    
+    if ($stmt = $mysqli->prepare($query)) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $newsletters = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        $mysqli->close();
+        return $newsletters;
+    } else {
+        echo "Det uppstod ett fel: " . $mysqli->error;
+    }
+}
 
-// Funktion för att hämta användarens nyhetsbrev från databasen baserat på användar-ID
+
+
 function get_user_newsletters($user_id) {
     // Anslut till databasen
     $mysqli = connect_database();
@@ -173,28 +187,51 @@ function get_subscribers() {
         </div>
         <?php
     }                
-}
+}// functions.php
 
-function get_subscriptions_by_user_id($user_id) {
+function get_subscribers_for_owner($owner_id) {
     $mysqli = connect_database();
+
+    // Förbered SQL-frågan för att hämta prenumeranter för nyhetsbrevsägaren
+    $query = "SELECT users.name AS subscriber_name, users.email AS subscriber_email, newsletters.name AS newsletter_name
+              FROM subscriptions
+              JOIN users ON subscriptions.user_id = users.id
+              JOIN newsletters ON subscriptions.newsletter_id = newsletters.id
+              WHERE newsletters.owner_id = ?";
     
-    $query = "SELECT * FROM subscriptions WHERE user_id = ?";
+    // Förbered och utför frågan
     if ($stmt = $mysqli->prepare($query)) {
-        $stmt->bind_param("i", $user_id);
+        // Binda ägarens ID som parameter
+        $stmt->bind_param("i", $owner_id);
+
+        // Utför frågan
         $stmt->execute();
+
+        // Hämta resultatet
         $result = $stmt->get_result();
-        $subscriptions = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Skapa en array för att lagra prenumeranterna
+        $subscribers = array();
+
+        // Loopa genom resultaten och lägg till prenumeranterna i arrayen
+        while ($row = $result->fetch_assoc()) {
+            $subscribers[] = $row;
+        }
+
+        // Stäng prepared statement och anslutningen till databasen
         $stmt->close();
         $mysqli->close();
-        return $subscriptions;
+
+        // Returnera prenumeranterna
+        return $subscribers;
     } else {
         echo "Det uppstod ett fel: " . $mysqli->error;
     }
 }
 
+
 function unsubscribe_from_newsletter($user_id, $newsletter_id) {
     $mysqli = connect_database();
-    // var_dump($newsletter_id); // Kommentera bort denna rad
     $stmt = $mysqli->prepare("DELETE FROM subscriptions WHERE user_id = ? AND newsletter_id = ?");
     $stmt->bind_param("ii", $user_id, $newsletter_id);
     $stmt->execute();
@@ -256,5 +293,43 @@ function get_username_by_id($user_id) {
     $mysqli->close();
 
     return $username;
+}
+
+
+function get_subscribers_for_user($user_id) {
+    $mysqli = connect_database();
+
+    // Förbered SQL-frågan för att hämta prenumeranter för användaren
+    $query = "SELECT users.name AS subscriber_name, users.email AS subscriber_email, newsletters.name AS newsletter_name
+              FROM subscriptions
+              JOIN users ON subscriptions.user_id = users.id
+              JOIN newsletters ON subscriptions.newsletter_id = newsletters.id
+              WHERE newsletters.owner_id = ?";
+    
+    // Förbered och utför frågan
+    if ($stmt = $mysqli->prepare($query)) {
+        // Binda användar-ID som parameter
+        $stmt->bind_param("i", $user_id);
+
+        // Utför frågan
+        $stmt->execute();
+
+        // Hämta resultatet
+        $result = $stmt->get_result();
+
+        // Loopa genom resultaten och visa prenumeranternas namn och e-postadress
+        while ($row = $result->fetch_assoc()) {
+            echo "<p><strong>Namn:</strong> " . $row['subscriber_name'] . "</p>";
+            echo "<p><strong>E-postadress:</strong> " . $row['subscriber_email'] . "</p>";
+            echo "<p><strong>Prenumererar på nyhetsbrev:</strong> " . $row['newsletter_name'] . "</p>";
+            echo "<hr>";
+        }
+
+        // Stäng prepared statement och anslutningen till databasen
+        $stmt->close();
+        $mysqli->close();
+    } else {
+        echo "Det uppstod ett fel: " . $mysqli->error;
+    }
 }
 ?>

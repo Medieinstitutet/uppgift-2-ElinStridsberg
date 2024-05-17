@@ -38,7 +38,7 @@
                     // Om användaren är inloggad som "subscriber", visa länken "Mina Prenumerationer"
                     echo '<li><a href="/newsletter">Mina Prenumerationer</a></li>';
                     echo '<li><a href="/newsletter/show-all-newsletters.php">Nyhetsbrev</a></li>';       
-                    // echo '<li><a href="/my-pages">Start</a></li>';                    
+                    echo '<li><a href="/my-pages">Start</a></li>';                    
                 } else {
                     // Om användaren är inloggad som någon annan roll eller inte är inloggad, visa länken "Mina Nyhetsbrev"
                     echo '<li><a href="/newsletter/my-newsletters.php">Mina Nyhetsbrev</a></li>';

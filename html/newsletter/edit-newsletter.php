@@ -3,14 +3,15 @@ include_once('../functions.php');
 connect_database();
 
 session_start(); // Säkerställ att sessionen startas för att få tillgång till $_SESSION
+include_once('../components/header.php');
 
 // Hämta nyhetsbrevets ID från URL-parametern
 $newsletter_id = $_GET['id'] ?? '';
 
-var_dump($newsletter_id);
+
 // Hämta användarens ID från sessionen
 $owner_id = $_SESSION['user_id'] ?? '';
-var_dump($owner_id);
+
 
 // Om nyhetsbrevets ID och användarens ID inte är tomma, hämta nyhetsbrevet från databasen
 if (!empty($newsletter_id) && !empty($owner_id)) {

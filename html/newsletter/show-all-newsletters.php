@@ -14,5 +14,4 @@ if (isset($_SESSION['message'])) {
 }
 
 get_newsletters();
-include('../components/footer.php');
 ?>

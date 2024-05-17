@@ -15,4 +15,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: /newsletter/show-all-newsletters.php");
     exit;
 }
+
 ?>
