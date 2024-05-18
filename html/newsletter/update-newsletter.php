@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($newsletter_id) && !empty($name) && !empty($description)) {
         update_newsletter($newsletter_id, $name, $description);
-        $success_message = "Nyhetsbrev uppdaterat!.";
+        $success_message = '<p class="success">' ."Nyhetsbrev uppdaterat!.". '</p>';
     } else {
         echo "All fields are required.";
     }
@@ -26,6 +26,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Update Newsletter</title>
+    <style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+         
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 90px;
+            margin-bottom: 50px;
+        }
+
+        .editNewsletters {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        textarea{
+            font-family: Arial, sans-serif;
+            
+
+        } 
+        p{
+            text-align: center;
+        }
+        .success{
+            color: green;
+        
+        }
+    </style>
 </head>
 <body>
     <h1>Redigera nyhetsbrev</h1>
@@ -37,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
 
     <!-- Här fortsätter resten av din HTML-kod för formuläret -->
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form class='editNewsletters' method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <input type="hidden" name="newsletter_id" value="<?php echo htmlspecialchars($newsletter_id, ENT_QUOTES, 'UTF-8'); ?>">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>"><br>

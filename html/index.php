@@ -56,7 +56,7 @@ $mysqli->close();
         include_once('./login/index.php');
     ?>
     
-    <button onclick="window.location.href='/account/create-account.php'">Registrera</button>
+    <!-- <button onclick="window.location.href='/account/create-account.php'">Registrera</button> -->
     <!-- <button onclick="window.location.href='/login'">Logga in</button> -->
    </div></body>
 </html>

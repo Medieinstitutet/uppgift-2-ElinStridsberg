@@ -79,6 +79,43 @@ function get_newsletters() {
         $newsletter_id = $row["id"];
         $is_subscribed = is_user_subscribed($user_id, $newsletter_id);
         ?>
+        <style>
+        body {
+            
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    margin-top: 90px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+div {
+    background-color: #fff;
+            padding: 30px;
+            padding-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px; 
+            margin-bottom: 20px;
+
+}
+
+ button {
+            width: 120px; /* Här är ändringen */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+
+        </style>
         <div>
             <h3><?php echo htmlspecialchars($row["name"]); ?></h3>
             <p><?php echo htmlspecialchars($row["description"]); ?></p>
@@ -160,6 +197,7 @@ function get_user_newsletters($user_id) {
     // Returnera nyhetsbreven
     return $user_newsletters;
 }
+
 function update_newsletter($newsletter_id, $name, $description) {
     $mysqli = connect_database();
 
@@ -174,7 +212,6 @@ function update_newsletter($newsletter_id, $name, $description) {
 }
 
 
-//TODO NEWSLETTER_ID SKA VARA DET ID SOM KUNDEN HAR PÅ SINA NYHETSBREV (DE NYHETSBREV SOM HAN ANVÄNDER)
 function get_subscribers() {
     $mysqli = connect_database();
     $result = $mysqli->query("SELECT * FROM subscriptions WHERE newsletter_id = 4");

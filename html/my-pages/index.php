@@ -18,7 +18,13 @@ $user_id = $_SESSION['user_id'];
 $user_name = get_username_by_id($user_id);
 // include_once('../components/header-loggedin.php');
 ?>
-
+<style>
+    
+    h1{
+        text-align: center;
+        margin-top: 200px;
+    }
+</style>
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -27,7 +33,7 @@ $user_name = get_username_by_id($user_id);
     <title>Välkommen</title>
 </head>
 <body>
-    <h2>Välkommen, <?php echo $user_name; ?></h2>
+    <h1>Välkommen <i><?php echo $user_name; ?></i></h1>
     <!-- Visa andra användarrelaterade uppgifter här -->
 <!-- '    <button onclick="window.location.href='/newsletter'">Dina prenumerationer</button> -->
 </body>
