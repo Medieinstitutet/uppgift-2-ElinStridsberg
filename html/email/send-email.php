@@ -28,6 +28,7 @@ $url = 'https://api.mailgun.net/v3/' . $domain . '/messages';
 // Generera en slumpmässig kod
 $random_code = bin2hex(random_bytes(16));
 
+$resetLink = "http://localhost:8080/email/reset-password-form.php?code=$random_code";
 // Hämta e-postadressen från formuläret
 $email = $_POST['email'];
 
@@ -35,8 +36,13 @@ $email = $_POST['email'];
 $fields = [
     'from' => 'postmaster@sandbox3eb0f57f114340529476de9043fa019c.mailgun.org',
     'to' => $email,
-    'subject' => 'Testmeddelande från Mailgun',
-    'text' => $random_code
+    'subject' => 'Återställning av lösenord',
+    'text' => "För att återställa ditt lösenord, klicka på länken nedan:\n\n" . 
+    "http://localhost:8080/email/reset-password-form.php?code=$random_code"
+
+
+
+    // 'text' => $random_code
 ];
 // var_dump($fields);
 // Skapa en cURL-resurs

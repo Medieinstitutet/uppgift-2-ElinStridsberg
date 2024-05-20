@@ -27,6 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result) {
         $_SESSION['name'] = $name;
         header('Location: /?success=1');
+        echo('Registrering');
         exit();
     } else {
         $errorMessage = "Misslyckades med att skapa användaren. Vänligen försök igen.";

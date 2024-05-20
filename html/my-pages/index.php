@@ -19,7 +19,6 @@ $user_name = get_username_by_id($user_id);
 // include_once('../components/header-loggedin.php');
 ?>
 <style>
-    
     h1{
         text-align: center;
         margin-top: 200px;

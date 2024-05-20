@@ -129,6 +129,65 @@ div {
     }
 }
 
+function get_newsletters_loggeout() {
+    $mysqli = connect_database();
+    $user_id = $_SESSION['user_id'] ?? null;
+    $result = $mysqli->query("SELECT * FROM newsletters");
+    
+    $rows = $result->fetch_all(MYSQLI_ASSOC);
+    foreach($rows as $row) {
+        $newsletter_id = $row["id"];
+        $is_subscribed = is_user_subscribed($user_id, $newsletter_id);
+        ?>
+        <style>
+        body {
+            
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    margin-top: 90px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+div {
+    background-color: #fff;
+            padding: 30px;
+            padding-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px; 
+            margin-bottom: 20px;
+
+}
+
+ button {
+            width: 120px; /* Här är ändringen */
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+
+        </style>
+        <div>
+            <h3><?php echo htmlspecialchars($row["name"]); ?></h3>
+            <p><?php echo htmlspecialchars($row["description"]); ?></p>
+            <form method="post" action="<?php echo $is_subscribed ? 'unsubscribe.php' : 'subscribe.php'; ?>">
+                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
+                <input type="hidden" name="newsletter_id" value="<?php echo htmlspecialchars($newsletter_id); ?>">
+                <button type="submit"><?php echo $is_subscribed ? 'Avprenumerera' : 'Prenumerera'; ?></button>
+            </form>
+        </div>
+        <?php
+    }
+}
 function get_newsletter_by_id($newsletter_id, $owner_id) {
     $mysqli = connect_database();
     $stmt = $mysqli->prepare("SELECT name, description FROM newsletters WHERE id = ? AND owner_id = ?");
@@ -310,6 +369,29 @@ function save_reset_password_code($user_id, $code) {
     } else {
         return false;
     }
+}
+
+
+function update_password($code, $new_password) {
+    // Anslut till databasen (ersätt med din egna anslutningskod)
+    $mysqli = connect_database();
+// Förbered en SQL-fråga för att uppdatera lösenordet baserat på återställningskoden
+    $query = "UPDATE users 
+    SET password = ? 
+    WHERE id = (SELECT user_id FROM resetPassword WHERE code = ?)";
+    
+// Skapa ett förberett uttalande
+$statement = $mysqli->prepare($query);
+
+// Bind parametrar och utför uppdateringen
+$statement->bind_param("ss", $new_password, $code);
+
+// Utför uppdateringen och returnera framgång eller misslyckande
+$success = $statement->execute();
+
+// Stäng uttalandet och återvänd framgångsindikatorn
+$statement->close();
+return $success;
 }
 
 function get_username_by_id($user_id) {
