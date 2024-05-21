@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     var_dump($code);
 
     if ($success) {
-        echo "Lösenordet har uppdaterats framgångsrikt!";
+        echo "Lösenordet har uppdaterats framgångsrikt!".$success.$new_password;
     } else {
         echo "Misslyckades med att uppdatera lösenordet. Vänligen försök igen.";
     }

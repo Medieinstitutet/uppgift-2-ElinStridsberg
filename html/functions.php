@@ -375,24 +375,44 @@ function save_reset_password_code($user_id, $code) {
     var_dump("ID".$user_id);
 }
 
-function update_password($new_password, $code) {
-    $conn = connect_database();
-
-    // Hämta user_id baserat på återställningskoden
-    $user_id = get_user_id_by_reset_code($code);
-
-    if ($user_id) {
-        $sql = "UPDATE users SET password = ? WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $new_password, $user_id);
-        $result = $stmt->execute();
-        $stmt->close();
-        $conn->close();
-        return $result;
-    } else {
+function update_password($hashed_password, $salt, $code) {
+    $mysqli = connect_database();
+    
+    // Kontrollera om användaren med återställningskoden finns
+    $stmt = $mysqli->prepare("SELECT user_id FROM resetPassword WHERE code = ?");
+    if (!$stmt) {
+        echo "Prepare failed (select user): (" . $mysqli->errno . ") " . $mysqli->error;
         return false;
     }
+    $stmt->bind_param("s", $code);
+    $stmt->execute();
+    $stmt->bind_result($user_id);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (!$user_id) {
+        echo "Ingen användare hittades med den angivna återställningskoden.";
+        return false;
+    }
+
+    // Uppdatera lösenordet
+    $stmt = $mysqli->prepare("UPDATE users SET password = ?, salt = ? WHERE id = ?");
+    if (!$stmt) {
+        echo "Prepare failed (update password): (" . $mysqli->errno . ") " . $mysqli->error;
+        return false;
+    }
+    $stmt->bind_param("ssi", $hashed_password, $salt, $user_id);
+    $stmt->execute();
+
+    if ($stmt->errno) {
+        echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+    }
+
+    $success = $stmt->affected_rows > 0;
+    $stmt->close();
+    return $success;
 }
+
 function get_username_by_id($user_id) {
     $mysqli = connect_database();
     $stmt = $mysqli->prepare("SELECT name FROM users WHERE id = ?");
