@@ -1,3 +1,21 @@
+<style>
+        /* Flexbox för att centrera innehållet */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Placera elementen i en kolumn */
+            height: 100vh; /* Hela fönsterhöjden */
+            margin: 0; /* Ta bort marginaler */
+        }
+
+        /* Styla knappen */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px; /* Lite utrymme överst för att separera från texten */
+        }
+    </style>
 <?php
 include_once('../functions.php');
 
@@ -16,11 +34,7 @@ if ($user) {
     $code = $random_code;
     $result = save_reset_password_code($user_id, $code);
 
-    if ($result) {
-        echo "Koden har sparats framgångsrikt i databasen: $code<br>";
-    } else {
-        echo "Misslyckades med att spara koden i databasen.";
-    }
+
 
     // Skicka e-postmeddelande
     // Mailgun API-nyckel och domän

@@ -1,12 +1,9 @@
 <?php
 session_start();
 include_once("./functions.php");
-
 $mysqli = connect_database();
-
 $mysqli->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

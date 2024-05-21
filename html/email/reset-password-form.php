@@ -11,7 +11,7 @@
         <?php
         if (isset($_GET['code'])) {
             $code = $_GET['code'];
-            var_dump("1. CODE: " . $code);
+        
             ?>
             <form method="POST" action="reset-password-form.php">
                 <input type="hidden" name="code" value="<?php echo htmlspecialchars($_GET['code']); ?>">

@@ -62,9 +62,17 @@ function is_user_subscribed($user_id, $newsletter_id) {
 }
 
 function create_user($name, $email, $password, $role) {
+    
     $mysqli = connect_database();
     $stmt = $mysqli->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $name, $email, $password, $role);
+    $stmt->execute();
+    $stmt->close();
+}
+function create_newsletter($name, $description, $owner_id) {
+    $mysqli = connect_database();
+    $stmt = $mysqli->prepare("INSERT INTO newsletters (name, description, owner_id) VALUES (?, ?, ?)");
+    $stmt->bind_param("ssi", $name, $description, $owner_id); // Ändrade till "ssi" för att matcha datatyperna
     $stmt->execute();
     $stmt->close();
 }

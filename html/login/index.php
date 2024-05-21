@@ -9,7 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = get_user_by_email($email);
     if ($user) {
         $hashed_password_from_db = $user["password"];
-        if ($password === $hashed_password_from_db) {
+        $salt = $user["salt"];
+
+        $hashed_input_password = md5($password . $salt);
+        if ($hashed_input_password === $hashed_password_from_db) {
             $_SESSION["user_id"] = $user["id"];
             $_SESSION["user_role"] = $user["role"];
             $_SESSION["is_signed_in"] = true;
@@ -89,15 +92,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             background-color: #eea236;
         }
 
-        .loginForm .login-resetp a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .loginForm .login-resetp a:hover {
-            color: #0056b3;
-        }
         .login-resetp {
             display: flex;
             flex-direction: column;
