@@ -182,7 +182,7 @@ div {
             <form method="post" action="<?php echo $is_subscribed ? 'unsubscribe.php' : 'subscribe.php'; ?>">
                 <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
                 <input type="hidden" name="newsletter_id" value="<?php echo htmlspecialchars($newsletter_id); ?>">
-                <button type="submit"><?php echo $is_subscribed ? 'Avprenumerera' : 'Prenumerera'; ?></button>
+             
             </form>
         </div>
         <?php
@@ -360,40 +360,31 @@ function get_user_by_email($email) {
 
 function save_reset_password_code($user_id, $code) {
     $mysqli = connect_database();
-    $user_id = $mysqli->real_escape_string($user_id);
-    $code = $mysqli->real_escape_string($code);
-    $query = "INSERT INTO resetPassword (user_id, code) VALUES ('$user_id', '$code')";
+    $query = "INSERT INTO resetPassword (user_id, code) VALUES (?, ?)";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("is", $user_id, $code);
+    return $stmt->execute();
+    var_dump("ID".$user_id);
+}
 
-    if ($mysqli->query($query) === TRUE) {
-        return true;
+function update_password($new_password, $code) {
+    $conn = connect_database();
+
+    // Hämta user_id baserat på återställningskoden
+    $user_id = get_user_id_by_reset_code($code);
+
+    if ($user_id) {
+        $sql = "UPDATE users SET password = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $new_password, $user_id);
+        $result = $stmt->execute();
+        $stmt->close();
+        $conn->close();
+        return $result;
     } else {
         return false;
     }
 }
-
-
-function update_password($code, $new_password) {
-    // Anslut till databasen (ersätt med din egna anslutningskod)
-    $mysqli = connect_database();
-// Förbered en SQL-fråga för att uppdatera lösenordet baserat på återställningskoden
-    $query = "UPDATE users 
-    SET password = ? 
-    WHERE id = (SELECT user_id FROM resetPassword WHERE code = ?)";
-    
-// Skapa ett förberett uttalande
-$statement = $mysqli->prepare($query);
-
-// Bind parametrar och utför uppdateringen
-$statement->bind_param("ss", $new_password, $code);
-
-// Utför uppdateringen och returnera framgång eller misslyckande
-$success = $statement->execute();
-
-// Stäng uttalandet och återvänd framgångsindikatorn
-$statement->close();
-return $success;
-}
-
 function get_username_by_id($user_id) {
     $mysqli = connect_database();
     $stmt = $mysqli->prepare("SELECT name FROM users WHERE id = ?");
@@ -451,4 +442,47 @@ function get_subscribers_for_user($user_id) {
         echo "Det uppstod ett fel: " . $mysqli->error;
     }
 }
+
+function get_user_id_by_reset_code($code) {
+    $conn = connect_database();
+
+    $sql = "SELECT user_id FROM resetPassword WHERE code = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $code);
+    $stmt->execute();
+    $stmt->bind_result($user_id);
+    $stmt->fetch();
+    $stmt->close();
+    $conn->close();
+
+    return $user_id ? $user_id : false;
+}
+
+function get_reset_code_by_user_id($user_id) {
+    // Anslut till databasen
+    $mysqli = connect_database();
+
+    // Förbered en SQL-fråga för att hämta återställningskoden
+    $sql = "SELECT code FROM resetPassword WHERE user_id = ?";
+
+    // Förbered och kör SQL-frågan med användarens ID som parameter
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    // Hämta resultatet
+    $result = $stmt->get_result();
+    
+    // Kontrollera om det finns några rader
+    if ($result->num_rows > 0) {
+        // Hämta den första raden
+        $row = $result->fetch_assoc();
+        // Returnera återställningskoden från databasen
+        return $row['code'];
+    } else {
+        // Om ingen kod hittades, returnera false eller ett annat lämpligt värde
+        return false;
+    }
+}
+
 ?>

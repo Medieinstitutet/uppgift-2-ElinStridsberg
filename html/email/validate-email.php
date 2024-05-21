@@ -1,82 +1,20 @@
-<style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        input[type="email"] {
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 20px;
-        }
-    </style>
- <?php
-// Inkludera din databasanlutningsfil och andra hjälpfunktioner
+<?php
 include('../functions.php');
 
-// Kontrollera om formuläret har skickats med POST-metoden
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Hämta e-postadressen från formuläret
     $email = $_POST['email'];
-
-    // Kontrollera om e-postadressen finns i databasen
     $user = get_user_by_email($email);
 
-    // Om användaren finns i databasen
     if ($user) {
-        // Om e-postadressen finns i databasen, skicka e-posten
+        // Spara reset-koden i databasen
+        $user_id = $user['id'];
+        // $reset_code = bin2hex(random_bytes(16));
+        // save_reset_password_code($user_id, $reset_code);
+
+        // Skicka återställningslänken via e-post
         include_once('send-email.php');
     } else {
-        // Om e-postadressen inte finns i databasen, visa ett felmeddelande
         echo "E-postadressen finns inte i databasen.";
     }
 }
-
 ?>
