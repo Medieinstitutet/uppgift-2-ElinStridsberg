@@ -1,15 +1,12 @@
 <?php
-// Starta sessionen först
 session_start();
-
-// Inkludera dina funktioner
 include_once('../functions.php');
 include_once('../components/header.php');
 
 
 // Kontrollera om användaren är inloggad
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Omdirigera användaren till inloggningssidan om de inte är inloggad
+    echo ("Vänligen logga in");
     exit(); // Avsluta exekveringen här
 }
 

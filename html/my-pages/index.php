@@ -1,11 +1,10 @@
 <?php
 session_start();
-
 include('../functions.php');
 include_once('../components/header.php');
 if (!is_signed_in()) {
 
-    header("Location: index.php");
+    echo ("Vänligen logga in");
     exit(); 
 }
 

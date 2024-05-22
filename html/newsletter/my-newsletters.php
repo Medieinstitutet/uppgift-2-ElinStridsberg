@@ -8,7 +8,7 @@ if (is_signed_in()) {
   
     $user_newsletters = get_user_newsletters($user_id);
     if ($user_newsletters) {
-        echo '<h2>Your Newsletters</h2>';
+        echo '<h2>Dina Nyhetsbrev</h2>';
         echo '<ul>';
         foreach ($user_newsletters as $newsletter) {
             echo '<div class="newsletters">';
@@ -25,11 +25,11 @@ if (is_signed_in()) {
         echo '</ul>';
         
     } else {
-        echo '<p>You have no newsletters.</p>';
+        echo '<p>Du har inga nyhetsbrev.</p>';
        
     }
 } else {
-    echo '<p>Please sign in to view your newsletters.</p>';
+    echo '<p>Vänligen logga in för att se dina nyhetsbrev.</p>';
 }
 ?>
 
