@@ -172,7 +172,7 @@ div {
 }
 
  button {
-            width: 120px; /* Här är ändringen */
+            width: 120px; 
             padding: 10px;
             border: none;
             border-radius: 4px;
@@ -236,45 +236,35 @@ function get_user_subscribed_newsletters($user_id) {
 
 
 function get_user_newsletters($user_id) {
-    // Anslut till databasen
     $mysqli = connect_database();
 
-    // Förbered SQL-frågan för att hämta användarens nyhetsbrev baserat på owner_id
     $stmt = $mysqli->prepare("SELECT id, name, description FROM newsletters WHERE owner_id = ?");
-    $stmt->bind_param("i", $user_id); // "i" indikerar att det förväntas en integer
+    $stmt->bind_param("i", $user_id); 
 
-    // Utför frågan
     $stmt->execute();
 
-    // Hämta resultatet
     $result = $stmt->get_result();
 
-    // Skapa en array för att lagra nyhetsbreven
     $user_newsletters = array();
 
-    // Loopa genom resultaten och lägg till nyhetsbreven i arrayen
     while ($row = $result->fetch_assoc()) {
         $user_newsletters[] = $row;
     }
 
-    // Stäng prepared statement och anslutningen till databasen
     $stmt->close();
     $mysqli->close();
 
-    // Returnera nyhetsbreven
     return $user_newsletters;
 }
 
 function update_newsletter($newsletter_id, $name, $description) {
     $mysqli = connect_database();
 
-    // Förbered en SQL-fråga för att uppdatera nyhetsbrevet i databasen
     $stmt = $mysqli->prepare("UPDATE newsletters SET name = ?, description = ? WHERE id = ?");
     $stmt->bind_param("ssi", $name, $description, $newsletter_id);
     $stmt->execute();
     $stmt->close();
     
-    // Stäng anslutningen
     $mysqli->close();
 }
 
@@ -291,42 +281,33 @@ function get_subscribers() {
         </div>
         <?php
     }                
-}// functions.php
+}
 
 function get_subscribers_for_owner($owner_id) {
     $mysqli = connect_database();
 
-    // Förbered SQL-frågan för att hämta prenumeranter för nyhetsbrevsägaren
     $query = "SELECT users.name AS subscriber_name, users.email AS subscriber_email, newsletters.name AS newsletter_name
               FROM subscriptions
               JOIN users ON subscriptions.user_id = users.id
               JOIN newsletters ON subscriptions.newsletter_id = newsletters.id
               WHERE newsletters.owner_id = ?";
     
-    // Förbered och utför frågan
     if ($stmt = $mysqli->prepare($query)) {
-        // Binda ägarens ID som parameter
         $stmt->bind_param("i", $owner_id);
 
-        // Utför frågan
         $stmt->execute();
 
-        // Hämta resultatet
         $result = $stmt->get_result();
 
-        // Skapa en array för att lagra prenumeranterna
         $subscribers = array();
 
-        // Loopa genom resultaten och lägg till prenumeranterna i arrayen
         while ($row = $result->fetch_assoc()) {
             $subscribers[] = $row;
         }
 
-        // Stäng prepared statement och anslutningen till databasen
         $stmt->close();
         $mysqli->close();
 
-        // Returnera prenumeranterna
         return $subscribers;
     } else {
         echo "Det uppstod ett fel: " . $mysqli->error;
@@ -378,7 +359,6 @@ function save_reset_password_code($user_id, $code) {
 function update_password($hashed_password, $salt, $code) {
     $mysqli = connect_database();
     
-    // Kontrollera om användaren med återställningskoden finns
     $stmt = $mysqli->prepare("SELECT user_id FROM resetPassword WHERE code = ?");
     if (!$stmt) {
         echo "Prepare failed (select user): (" . $mysqli->errno . ") " . $mysqli->error;
@@ -395,7 +375,6 @@ function update_password($hashed_password, $salt, $code) {
         return false;
     }
 
-    // Uppdatera lösenordet
     $stmt = $mysqli->prepare("UPDATE users SET password = ?, salt = ? WHERE id = ?");
     if (!$stmt) {
         echo "Prepare failed (update password): (" . $mysqli->errno . ") " . $mysqli->error;
@@ -437,25 +416,19 @@ function get_username_by_id($user_id) {
 function get_subscribers_for_user($user_id) {
     $mysqli = connect_database();
 
-    // Förbered SQL-frågan för att hämta prenumeranter för användaren
     $query = "SELECT users.name AS subscriber_name, users.email AS subscriber_email, newsletters.name AS newsletter_name
               FROM subscriptions
               JOIN users ON subscriptions.user_id = users.id
               JOIN newsletters ON subscriptions.newsletter_id = newsletters.id
               WHERE newsletters.owner_id = ?";
     
-    // Förbered och utför frågan
     if ($stmt = $mysqli->prepare($query)) {
-        // Binda användar-ID som parameter
         $stmt->bind_param("i", $user_id);
 
-        // Utför frågan
         $stmt->execute();
 
-        // Hämta resultatet
         $result = $stmt->get_result();
 
-        // Loopa genom resultaten och visa prenumeranternas namn och e-postadress
         while ($row = $result->fetch_assoc()) {
             echo "<p><strong>Namn:</strong> " . $row['subscriber_name'] . "</p>";
             echo "<p><strong>E-postadress:</strong> " . $row['subscriber_email'] . "</p>";
@@ -463,7 +436,6 @@ function get_subscribers_for_user($user_id) {
             echo "<hr>";
         }
 
-        // Stäng prepared statement och anslutningen till databasen
         $stmt->close();
         $mysqli->close();
     } else {
@@ -487,28 +459,20 @@ function get_user_id_by_reset_code($code) {
 }
 
 function get_reset_code_by_user_id($user_id) {
-    // Anslut till databasen
     $mysqli = connect_database();
 
-    // Förbered en SQL-fråga för att hämta återställningskoden
     $sql = "SELECT code FROM resetPassword WHERE user_id = ?";
 
-    // Förbered och kör SQL-frågan med användarens ID som parameter
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
 
-    // Hämta resultatet
     $result = $stmt->get_result();
     
-    // Kontrollera om det finns några rader
     if ($result->num_rows > 0) {
-        // Hämta den första raden
         $row = $result->fetch_assoc();
-        // Returnera återställningskoden från databasen
         return $row['code'];
     } else {
-        // Om ingen kod hittades, returnera false eller ett annat lämpligt värde
         return false;
     }
 }

@@ -33,7 +33,6 @@ include_once('../components/header-loggedout.php');
     <div class="logout-container">
         <h1>Du är nu utloggad</h1>
         <p><i>Tack för att du besökte oss.</i></p>
-        <!-- <a href="http://localhost:8080/index.php">Logga in igen</a> -->
     </div>
 </body>
 </html>

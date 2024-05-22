@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        /* Stilmall för navigationen */
         body {
             background-color: whitesmoke;
 
@@ -71,18 +70,13 @@
         <nav>
             <ul>
                 <?php
-                // Kontrollera om användaren är inloggad och har rollen "subscriber"
                 if (!is_signed_in()) {
-                    // Om användaren är inloggad som "subscriber", visa länken "Mina Prenumerationer"
+              
                     echo '<li><a href="/newsletter/show-all-newsletters.loggedout.php">Nyhetsbrev</a></li>';       
                     echo '<li><a href="/index.php">Logga in</a></li>';
                     echo '<li><a href="/account/create-account.php">Skapa konto</a></li>';
                 } 
-                    // Om användaren är inloggad som någon annan roll eller inte är inloggad, visa länken "Mina Nyhetsbrev"
-              
-
-                
-            
+                  
                 ?>
             </ul>
            

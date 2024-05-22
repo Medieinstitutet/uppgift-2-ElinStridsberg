@@ -1,49 +1,38 @@
 <?php
-session_start(); // Starta sessionen för att använda sessionsvariabler
-
-include_once('../functions.php'); // Inkludera dina funktioner
+session_start(); 
+include_once('../functions.php'); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Hantera formulärdata och lägg till användaren i databasen
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "SaaS");
 
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = $_POST['password']; // Lösenord som användaren angav
+    $password = $_POST['password']; 
 
-    // Generera ett random salt
-    $salt = bin2hex(random_bytes(16)); // Slumpmässigt genererat salt
+    $salt = bin2hex(random_bytes(16)); 
 
-    // Skapa det hashade lösenordet med md5 och saltet
     $hashed_password = md5($password . $salt);
 
-    // Hämta värdet av 'role' från formuläret, förutsatt att det är satt
     $role = isset($_POST['role']) ? $_POST['role'] : '';
 
-    // Lägg till användaren i databasen med både det hashade lösenordet och saltet
     $sql = "INSERT INTO users (name, email, password, salt, role) VALUES ('$name', '$email', '$hashed_password', '$salt', '$role')";
 
     $result = $mysqli->query($sql);
 
     if ($result) {
-        // Få det nyss insatta användar-ID:t
         $user_id = $mysqli->insert_id;
 
-        // Om användaren är en kund, lägg till en tom rad i newslettertabellen
         if ($role === 'customer') {
-            // Anropa create_newsletter() med det korrekta `user_id`
             create_newsletter('', '', $user_id);
         }
 
-        // Användaren har lagts till framgångsrikt
         $_SESSION['name'] = $name;
         header('Location: /?success=1');
-        exit(); // Avsluta skriptet efter omdirigering
+        exit(); 
     } else {
         $errorMessage = "Misslyckades med att skapa användaren. Vänligen försök igen.";
     }
 
-    // Stäng databaskopplingen
     $mysqli->close();
 }
 ?>
@@ -118,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="registerForm">
         <?php
-        // Visa eventuellt felmeddelande om det är satt
         if (isset($errorMessage)) {
             echo "<p class='errorMessage'>$errorMessage</p>";
         }

@@ -2,35 +2,29 @@
 include_once('../functions.php');
 connect_database();
 
-session_start(); // Säkerställ att sessionen startas för att få tillgång till $_SESSION
+session_start(); 
 include_once('../components/header.php');
 
-// Hämta nyhetsbrevets ID från URL-parametern
 $newsletter_id = $_GET['id'] ?? '';
 
 
-// Hämta användarens ID från sessionen
 $owner_id = $_SESSION['user_id'] ?? '';
 
 
-// Om nyhetsbrevets ID och användarens ID inte är tomma, hämta nyhetsbrevet från databasen
 if (!empty($newsletter_id) && !empty($owner_id)) {
     $newsletter = get_newsletter_by_id($newsletter_id, $owner_id);
     
-    // Kontrollera om nyhetsbrevet finns
     if ($newsletter) {
-        // Hämta titel och beskrivning från nyhetsbrevet
         $name = $newsletter['name'];
         $description = $newsletter['description'];
     } else {
-        // Om nyhetsbrevet inte finns, visa ett felmeddelande
+
         echo "Error: Newsletter not found.";
-        exit(); // Avsluta skriptet om nyhetsbrevet inte hittas
+        exit(); 
     }
 } else {
-    // Om nyhetsbrevets ID eller användarens ID saknas, visa ett felmeddelande
     echo "Error: Newsletter ID or user ID missing.";
-    exit(); // Avsluta skriptet om ID saknas
+    exit(); 
 }
 ?>
 <!DOCTYPE html>
@@ -96,7 +90,6 @@ if (!empty($newsletter_id) && !empty($owner_id)) {
 <body>
     <h1>Redigera Nyhetsbrev</h1>
 
-    <!-- Skapa HTML-formulär för redigering av nyhetsbrev -->
     <form class='editNewsletters' method="post" action="update-newsletter.php">
         <input type="hidden" name="newsletter_id" value="<?php echo htmlspecialchars($newsletter_id, ENT_QUOTES, 'UTF-8'); ?>">
         <label for="name">Titel:</label><br>

@@ -1,14 +1,10 @@
 <?php
-// Starta sessionen
 session_start();
 
-// Töm alla sessionsvariabler
 $_SESSION = array();
 
-// Förstör sessionen
 session_destroy();
 
-// Redirect till utloggad sida
 header("Location: logged-out.php");
 exit();
 ?>

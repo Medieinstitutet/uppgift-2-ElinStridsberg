@@ -3,13 +3,10 @@ session_start();
 include_once('../functions.php');
 include('../components/header.php');
 
-// Kontrollera om användaren är inloggad och hämta användar-ID
 if (is_signed_in()) {
     $user_id = $_SESSION['user_id'];
   
-    // Hämta användarens nyhetsbrev från databasen baserat på användar-ID
     $user_newsletters = get_user_newsletters($user_id);
-    // Visa nyhetsbreven om de finns
     if ($user_newsletters) {
         echo '<h2>Your Newsletters</h2>';
         echo '<ul>';
@@ -32,7 +29,6 @@ if (is_signed_in()) {
        
     }
 } else {
-    // Om användaren inte är inloggad, visa ett meddelande eller omdirigera till inloggningssidan
     echo '<p>Please sign in to view your newsletters.</p>';
 }
 ?>
@@ -66,13 +62,13 @@ if (is_signed_in()) {
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 300px;
-        margin: 0 auto; /* Centrera div-elementet horisontellt */
-        display: flex; /* Använd flexbox */
-        justify-content: center; /* Centrera innehållet horisontellt */
-        align-items: center; /* Centrera innehållet vertikalt */
+        margin: 0 auto; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
     }
     button {
-            width: 120px; /* Här är ändringen */
+            width: 120px; 
             padding: 10px;
             border: none;
             border-radius: 4px;

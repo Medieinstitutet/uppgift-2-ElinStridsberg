@@ -34,12 +34,12 @@ $mysqli->close();
         }
         .loggaIn input {
             display: block;
-            margin-bottom: 10px; /* Justera önskad avstånd mellan input-fälten */
+            margin-bottom: 10px; 
         }
 
         .loggaIn button {
-            margin: 0 auto; /* Centrera horisontellt */
-            display: block; /* Gör knappen till ett blockelement för att möjliggöra margin: 0 auto; */
+            margin: 0 auto; 
+            display: block; 
         }
 
        
@@ -53,7 +53,5 @@ $mysqli->close();
         include_once('./login/index.php');
     ?>
     
-    <!-- <button onclick="window.location.href='/account/create-account.php'">Registrera</button> -->
-    <!-- <button onclick="window.location.href='/login'">Logga in</button> -->
    </div></body>
 </html>

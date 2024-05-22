@@ -3,7 +3,7 @@ include_once('../functions.php');
 connect_database();
 include_once('../components/header.php');
 
-$success_message = ""; // Variabel för att lagra framgångsmeddelande
+$success_message = ""; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newsletter_id = $_POST['newsletter_id'] ?? '';
@@ -94,11 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php
     if (!empty($success_message)) {
-        echo "<p>$success_message</p>"; // Visa framgångsmeddelande om det finns ett
+        echo "<p>$success_message</p>"; 
     }
     ?>
 
-    <!-- Här fortsätter resten av din HTML-kod för formuläret -->
     <form class='editNewsletters' method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <input type="hidden" name="newsletter_id" value="<?php echo htmlspecialchars($newsletter_id, ENT_QUOTES, 'UTF-8'); ?>">
         <label for="name">Name:</label><br>

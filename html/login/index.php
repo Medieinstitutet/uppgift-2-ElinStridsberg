@@ -18,10 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["is_signed_in"] = true;
 ?>
             <script>
-                window.location.href = '/my-pages'; // Byt ut '/my-pages' med den önskade URL:en
+                window.location.href = '/my-pages';
             </script>
 <?php
-            exit(); // Avsluta exekveringen här för att förhindra att resten av koden körs
+            exit(); 
         } else {
             $error_message = "Felaktigt lösenord.";
         }
@@ -53,8 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             padding-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px; /* Ställ in en fast bredd för formuläret */
-
+            width: 300px;
         }
 
         .loginForm input[type="email"],
@@ -69,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         .loginForm input[type="submit"],
         .loginForm button {
-            width: 120px; /* Här är ändringen */
+            width: 120px; 
             padding: 10px;
             border: none;
             border-radius: 4px;
@@ -110,7 +109,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 <?php
-    // Visa eventuellt felmeddelande om det är satt
     if (isset($error_message)) {
         echo "<p>$error_message</p>";
     }
